@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Display Tasks</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse; /* Add this line */
+      }
+      th,
+      td {
+        border: 1px solid black; /* Move border to td and th */
+        text-align: center;
+        vertical-align: middle;
+        padding: 2px 15px;
+      }
+      .table-container {
+        margin-top: 11vh;
+        max-height: 90vh;
+        width: 50%;
+        overflow-y: scroll;
+        padding: 0 15px;
+      }
+
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
+      input[type="number"] {
+        appearance: textfield;
+        -moz-appearance: textfield;
+      }
+    </style>
+  </head>
+  <body>
+    {% extends "base.html" %} {% block content %}
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Due date</th>
+            <th>Status</th>
+            <th>Category</th>
+            <th>Edit</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in items %}
+          <tr>
+            <td>{{ item.title }}</td>
+            <td>{{ item.description }}</td>
+            <td>{{ item.due_date }}</td>
+            <td>{{ item.status }}</td>
+            <td>{{ item.category }}</td>
+            <td>
+              <a href="{% url 'taskmanager:edit_item' item.id %}">Edit</a>
+            </td>
+            <td>
+              <a href="{% url 'taskmanager:delete_item' item.id %}">Delete</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endblock %}
+  </body>
+</html>
