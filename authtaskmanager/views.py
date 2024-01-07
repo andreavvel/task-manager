@@ -30,14 +30,14 @@ def log_in(request):
             # back to the customer with the data form
             else:
                 context = {'form': form}
-                return render(request, 'authentication/login.html', context)
+                return render(request, 'authtaskmanager/login.html', context)
         else:
             context = {'form': form}
-            return render(request, 'authentication/login.html', context)
+            return render(request, 'authtaskmanager/login.html', context)
     # If GET - send an empty form
     else:
         context = {'form': LoginForm()}
-        return render(request, 'authentication/login.html', context)
+        return render(request, 'authtaskmanager/login.html', context)
 
 def log_out(request):
     logout(request)
