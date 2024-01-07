@@ -19,8 +19,8 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('home.urls')),
-    path('news/', include('news_app.urls')),
+    path('', include('taskmanager.urls')), #aqui era home.urls pero aja lo cambiamos, veamos later
+    #path('news/', include('news_app.urls')),
     #path('', include('authentication.urls')),
     path('taskmanager/', include('taskmanager.urls')),
     path('', include('authtaskmanager.urls')),
