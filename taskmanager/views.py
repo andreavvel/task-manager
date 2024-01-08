@@ -2,10 +2,24 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Category, Task
 from .forms import TaskForm
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from datetime import date
+
 
 def display_items(request):
-    items = Task.objects.all()
-    return render(request, 'taskmanager/display_items.html', {'items': items})
+    all_items = Task.objects.all().order_by('due_date')
+    paginator = Paginator(all_items, 10)  # Show 10 tasks per page
+
+    page_number = request.GET.get('page')
+    try:
+        items = paginator.page(page_number)
+    except PageNotAnInteger:
+        items = paginator.page(1)
+    except EmptyPage:
+        items = paginator.page(paginator.num_pages)
+
+    today_date = date.today()
+    return render(request, 'taskmanager/display_items.html', {'items': items, 'today_date': today_date})
 
 @login_required(login_url='/login/')
 def add_item(request):

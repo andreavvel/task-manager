@@ -1,5 +1,6 @@
 from django import forms
 from .models import Category, Task
+from datetime import date
 
 class TaskForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -10,5 +11,6 @@ class TaskForm(forms.ModelForm):
         model = Task
         fields = ['title', 'description', 'due_date', 'status', 'category']
         widgets = {
-            'due_date': forms.DateInput(attrs={'type': 'date'})
+            'due_date': forms.DateInput(attrs={'type': 'date', 'min': str(date.today())})
+            #'due_date': forms.DateInput(attrs={'type': 'date'})
         }
