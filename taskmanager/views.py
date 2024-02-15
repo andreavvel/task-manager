@@ -5,10 +5,10 @@ from .forms import TaskForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from datetime import date
 
-
+@login_required(login_url='/login/')
 def display_items(request):
-    all_items = Task.objects.all().order_by('due_date')
-    paginator = Paginator(all_items, 10)  # Show 10 tasks per page
+    user_tasks = Task.objects.filter(user=request.user).order_by('due_date')
+    paginator = Paginator(user_tasks, 10)  # Show 10 tasks per page
 
     page_number = request.GET.get('page')
     try:
@@ -27,6 +27,7 @@ def add_item(request):
         form = TaskForm(request.POST)
         if form.is_valid():
             item = form.save(commit=False)
+            item.user = request.user
             # Additional processing or setting user-related data
             item.save()
             return redirect('taskmanager:display_items')  # Redirect to the display view
