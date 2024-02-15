@@ -1,6 +1,21 @@
 from django.shortcuts import render, redirect
 from .forms import LoginForm
 from django.contrib.auth import authenticate, login, logout
+from .forms import CustomUserCreationForm
+
+def signUp(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.is_admin = form.cleaned_data['is_admin']
+            user.save()
+            login(request, user)
+            return redirect('home')  # Redirect to the desired page after signup
+    else:
+        form = CustomUserCreationForm()
+
+    return render(request, 'authtaskmanager/signup.html', {'form': form})
 
 def log_in(request):
     # Checking if the user is logged in
