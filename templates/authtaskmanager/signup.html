@@ -10,12 +10,19 @@
                     <h3 class="text-center">Sign Up</h3>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="{% url 'signup' %}">
+                    <form method="post" action="/signup/">
                         {% csrf_token %}
-                        {{ form.as_p }}
-                        <div class="mb-3 form-check">
-                            {{ form.is_admin }} {{ form.is_admin.label_tag }}
-                        </div>
+                        {{ form.username.label_tag }} {{ form.username }} {{ form.username.errors }}
+                        <br>
+                        <br>
+                        {{ form.password1.label_tag }} {{ form.password1 }} {{ form.password1.errors }}
+                        <br>
+                        <br>
+                        {{ form.password2.label_tag }} {{ form.password2 }} {{ form.password2.errors }}
+                        <br>
+                        <br>
+                        {{ form.is_admin.label_tag }} {{ form.is_admin }} {{ form.is_admin.errors }}
+                        <br>
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary">Sign Up</button>
                         </div>
