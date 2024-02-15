@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect
+from django.http import HttpResponseForbidden
+from django.shortcuts import render, redirect,  get_object_or_404
 from .forms import LoginForm
 from django.contrib.auth import authenticate, login, logout
 from .forms import CustomUserCreationForm
@@ -6,6 +7,9 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from .utils import is_admin, is_regular_user
+from .models import CustomUser
+from django.contrib.auth.forms import UserCreationForm
+#from ..taskmanager.models import Task
 
 def signUp(request):
     if request.method == 'POST':
@@ -64,5 +68,18 @@ def log_out(request):
 
 @user_passes_test(is_admin)
 def user_list(request):
+
+    """ users = CustomUser.objects.all()
+    return render(request, 'taskmanager/user_list.html', {'users': users}) """
     users = get_user_model().objects.all()
     return render(request, 'authtaskmanager/userlist.html', {'users': users})
+
+@user_passes_test(is_admin)
+def delete_user(request, user_id):
+    user = get_object_or_404(CustomUser, id=user_id)
+    
+    if request.method == 'POST':
+        user.delete()
+        return redirect('authtaskmanager/userlist.html')
+
+    return render(request, 'authtaskmanager/delete_user.html', {'user': user})

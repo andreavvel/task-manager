@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Display Tasks</title>
-    <style>
-      .expired-task {
-        background-color: red;
-      }
-    </style>
-  </head>
-  <body>
-    {% extends "base.html" %} {% block content %}
-    <div class="container">
-      <h2 class="mt-4 mb-3">Tasks</h2>
-      <!-- Search form -->
-      <form class="d-flex mb-4">
+
+<head>
+  <title>Display Tasks</title>
+  <style>
+    .expired-task {
+      background-color: red;
+    }
+  </style>
+</head>
+
+<body>
+  {% extends "base.html" %} {% block content %}
+  <div class="container">
+    <h2 class="mt-4 mb-3">Tasks</h2>
+    <!-- Search form -->
+    <!-- <form class="d-flex mb-4">
         <input
           class="form-control me-2"
           type="search"
@@ -21,95 +23,66 @@
           aria-label="Search"
         />
         <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
+      </form> -->
 
-      <div class="table-responsive">
-        <table class="table">
-          <thead class="table-dark">
-            <tr>
-              <th>Title</th>
-              <th>Description</th>
-              <th>Due date</th>
-              <th>Status</th>
-              <th>Category</th>
-              <th>Edit</th>
-              <th>Delete</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for item in items %}
-            <tr
-              {%
-              if
-              item.due_date
-              <
-              today_date
-              %}class="expired-task"
-              {%
-              endif
-              %}
-            >
-              <td>{{ item.title }}</td>
-              <td>{{ item.description }}</td>
-              <td>{{ item.due_date }}</td>
-              <td>{{ item.status }}</td>
-              <td>{{ item.category }}</td>
-              <td>
-                <a
-                  href="{% url 'taskmanager:edit_item' item.id %}"
-                  class="btn btn-primary btn-sm"
-                  >Edit</a
-                >
-              </td>
-              <td>
-                <a
-                  href="{% url 'taskmanager:delete_item' item.id %}"
-                  class="btn btn-danger btn-sm"
-                  >Delete</a
-                >
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-      <!-- Pagination -->
-      <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center">
-          {% if items.has_previous %}
-          <li class="page-item">
-            <a
-              class="page-link"
-              href="?page=1"
-              tabindex="-1"
-              aria-disabled="true"
-              >First</a
-            >
-          </li>
-          <li class="page-item">
-            <a class="page-link" href="?page={{ items.previous_page_number }}"
-              >Previous</a
-            >
-          </li>
-          {% endif %} {% for num in items.paginator.page_range %}
-          <li class="page-item{% if num == items.number %} active{% endif %}">
-            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
-          </li>
-          {% endfor %} {% if items.has_next %}
-          <li class="page-item">
-            <a class="page-link" href="?page={{ items.next_page_number }}"
-              >Next</a
-            >
-          </li>
-          <li class="page-item">
-            <a class="page-link" href="?page={{ items.paginator.num_pages }}"
-              >Last</a
-            >
-          </li>
-          {% endif %}
-        </ul>
-      </nav>
+    <div class="table-responsive">
+      <table class="table">
+        <thead class="table-dark">
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Due date</th>
+            <th>Status</th>
+            <th>Category</th>
+            <th>Edit</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in items %}
+          <tr {% if item.due_date < today_date %}class="expired-task" {% endif %}>
+            <td>{{ item.title }}</td>
+            <td>{{ item.description }}</td>
+            <td>{{ item.due_date }}</td>
+            <td>{{ item.status }}</td>
+            <td>{{ item.category }}</td>
+            <td>
+              <a href="{% url 'taskmanager:edit_item' item.id %}" class="btn btn-primary btn-sm">Edit</a>
+            </td>
+            <td>
+              <a href="{% url 'taskmanager:delete_item' item.id %}" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
-    {% endblock %}
-  </body>
+    <!-- Pagination -->
+    <nav aria-label="Page navigation">
+      <ul class="pagination justify-content-center">
+        {% if items.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page=1" tabindex="-1" aria-disabled="true">First</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{ items.previous_page_number }}">Previous</a>
+        </li>
+        {% endif %} {% for num in items.paginator.page_range %}
+        <li class="page-item{% if num == items.number %} active{% endif %}">
+          <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+        </li>
+        {% endfor %} {% if items.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ items.next_page_number }}">Next</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{ items.paginator.num_pages }}">Last</a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+  {% endblock %}
+</body>
+
 </html>

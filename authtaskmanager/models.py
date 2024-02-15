@@ -4,4 +4,7 @@ from django.contrib.auth.models import AbstractUser
 class CustomUser(AbstractUser):
     is_regularuser = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
-    #rn we use the is regular user bool to check which user is which
+    tasks = models.ManyToManyField('taskmanager.Task', related_name='assigned_tasks', blank=True)
+
+    def __str__(self):
+        return self.username
